@@ -601,9 +601,9 @@ var jssim = jssim || {};
                 this.potentialField[i].push(0);
             }
         }
-        this.color = '#ff0000';
+        this.color = '#55aa55';
         this.trailColor = '#55aa55';
-        this.obstacleColor = '#888888';
+        this.obstacleColor = '#55aa55';
         this.targetColor = '#0000ff';
         this.cellWidth = 10;
         this.cellHeight = 10;
@@ -613,9 +613,9 @@ var jssim = jssim || {};
         this.minPotential = 1000000.0;
     };
 
-    Grid.prototype.setCell = function(x, y, value) {
-        this.cells[x][y] = value;
-        if(value > 0) {
+    Grid.prototype.setCell = function(x, y, color) {
+        this.cells[x][y] = color;
+        if(color > 0) {
             this.trails[x][y] += 1;
         }
     };
@@ -747,33 +747,11 @@ var jssim = jssim || {};
 
         for(var i=0; i < this.width; ++i){
             for(var j=0; j < this.height; ++j) {
-                if(this.showTrails && this.trails[i][j] > 0) {
-                    context.fillStyle=this.trailColor;
-                    context.fillRect(i * this.cellWidth, j * this.cellHeight, this.cellWidth-1, this.cellHeight-1);
-                }
-                if(this.showPotentialField && this.potentialField[i][j] != 0) {
-                    var potential = this.potentialField[i][j];
-                    var r = 255;
-                    var g = 100 + Math.floor(155 * (potential - this.minPotential) / (this.maxPotential - this.minPotential));
-                    var b = Math.floor(255 * (potential - this.minPotential) / (this.maxPotential - this.minPotential));
-                    context.fillStyle =  "rgb("+r+","+g+","+b+")";
-                    context.fillRect(i * this.cellWidth, j * this.cellHeight, this.cellWidth-1, this.cellHeight-1);
-                }
-                if(this.obstacles[i][j] > 0) {
-                    context.fillStyle = this.obstacleColor;
-                    context.fillRect(i * this.cellWidth, j * this.cellHeight, this.cellWidth-1, this.cellHeight-1);
-                }
-                if(this.cells[i][j] > 0) {
-                    context.fillStyle=this.color;
-                    context.fillRect(i * this.cellWidth, j * this.cellHeight, this.cellWidth-1, this.cellHeight-1);
-                }
-                if(this.targets[i][j] > 0) {
-                    context.fillStyle = this.targetColor;
+                if(this.cells[i][j]) {
+                    context.fillStyle=this.cells[i][j].color;
                     context.fillRect(i * this.cellWidth, j * this.cellHeight, this.cellWidth-1, this.cellHeight-1);
                 }
             }
-
-
         }
     };
 
