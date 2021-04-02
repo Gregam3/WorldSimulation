@@ -748,7 +748,7 @@ var jssim = jssim || {};
         for(var i=0; i < this.width; ++i){
             for(var j=0; j < this.height; ++j) {
                 if(this.cells[i][j]) {
-                    context.fillStyle=this.cells[i][j].color;
+                    context.fillStyle=this.cells[i][j];
                     context.fillRect(i * this.cellWidth, j * this.cellHeight, this.cellWidth-1, this.cellHeight-1);
                 }
             }

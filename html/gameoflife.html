@@ -17,19 +17,32 @@
         };
 
         CellularAgent.prototype = Object.create(jssim.SimEvent.prototype);
+
+        function updateWorld(width, height) {
+            for (let x = 0; x < width; ++x) {
+                let randomFactor = 0.9;
+                for (let j = 0; j < height; ++j) {
+                    randomFactor -= 0.1;
+                    if (Math.random() < randomFactor) {
+                        this.world.setCell(x, j, '#AAAAAA'); // dead
+                    } else {
+                        this.world.setCell(x, j, '#8a3333'); // live
+                    }
+                    sleep(1000);
+                    console.log(this.world);
+                }
+            }
+        }
+
         CellularAgent.prototype.update = function () {
             const width = this.world.width;
             const height = this.world.height;
-            for (let i = 0; i < width; ++i) {
-                for (let j = 0; j < height; ++j) {
-                    if (Math.random() < 0.5) {
-                        this.world.setCell(i, j, '#FF22DD'); // dead
-                    } else {
-                        this.world.setCell(i, j, 2); // live
-                    }
-                }
-            }
+            updateWorld.call(this, width, height);
         };
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
 
         const scheduler = new jssim.Scheduler();
         const grid = new jssim.Grid(128, 128);
@@ -37,8 +50,8 @@
         function init() {
             scheduler.reset();
             grid.reset();
-            grid.cellWidth = 5;
-            grid.cellHeight = 5;
+            grid.cellWidth = 50;
+            grid.cellHeight = 50;
             grid.showTrails = false;
             grid.trailColor = '#222222';
             scheduler.scheduleRepeatingIn(new CellularAgent(grid), 1);
